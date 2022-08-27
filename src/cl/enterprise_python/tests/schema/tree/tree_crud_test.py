@@ -68,12 +68,16 @@ class TreeCrudTest:
                     TreeLeg(leg_type="Fixed", leg_ccy=ccy_list[i % ccy_count]),
                     TreeLeg(leg_type="Floating", leg_ccy="EUR"),
                 ],
+                # adding notional of 100 and 200 for swap trades
+                notional=100 * (i + 1),
             )
             for i in range(0, 2)
         ]
         bonds = [
             TreeBond(
-                trade_id=f"T{i+1}", trade_type="Bond", bond_ccy=ccy_list[i % ccy_count]
+                trade_id=f"T{i+1}", trade_type="Bond", bond_ccy=ccy_list[i % ccy_count],
+                # adding notional of 300 for bond trade
+                notional=100 * (i + 1),
             )
             for i in range(2, 3)
         ]

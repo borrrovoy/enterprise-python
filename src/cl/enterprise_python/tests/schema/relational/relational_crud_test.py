@@ -84,6 +84,8 @@ class RelCrudTest:
                 trade_id=f"T{i + 1}",
                 trade_type="Swap",
                 legs=[fixed_legs[i], floating_legs[i]],
+                # adding notional of 100 and 200 for swap trades
+                notional=100 * (i + 1),
             )
             for i in range(0, 2)
         ]
@@ -94,6 +96,8 @@ class RelCrudTest:
                 trade_id=f"T{i + 1}",
                 trade_type="Bond",
                 bond_ccy=ccy_list[i % ccy_count],
+                # adding notional of 300 for bond trade
+                notional=100 * (i + 1),
             )
             for i in range(2, 3)
         ]
