@@ -163,7 +163,7 @@ class TreeCrudTest:
         # Add the result to approvaltests file
         result += "Trades with notional >= 200:\n" + "".join(
             [
-                f"    trade_id={trade.trade_id} trade_type={trade.trade_type} notional={trade.notional:.2f}\n"
+                f"    trade_id={trade.trade_id} trade_type={trade.trade_type} notional={trade.notional}\n"
                 for trade in trades_notional_gt_or_eq_200
             ]
         )

@@ -192,6 +192,19 @@ class RelCrudTest:
                     ]
                 )
 
+                # A query for trades with notional >= 200
+                trades_notional_gt_or_eq_200 = session.query(RelationalTrade)\
+                    .where(RelationalTrade.notional >= 200)\
+                    .order_by(RelationalTrade.trade_id)
+
+                # Add the result to approval test file
+                result += "Trades with notional >= 200:\n" + "".join(
+                    [
+                        f"    trade_id={trade.trade_id} trade_type={trade.trade_type} notional={trade.notional}\n"
+                        for trade in trades_notional_gt_or_eq_200
+                    ]
+                )
+
         # Verify result
         at.verify(result)
 
