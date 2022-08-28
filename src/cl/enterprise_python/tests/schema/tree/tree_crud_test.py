@@ -154,6 +154,20 @@ class TreeCrudTest:
             ]
         )
 
+        # A query for trades with notional >= 200
+        # Using 'gte' query operator that means 'greater than or equal to'
+        trades_notional_gt_or_eq_200 = TreeTrade.objects(
+            notional__gte=200
+        ).order_by("trade_id")
+
+        # Add the result to approvaltests file
+        result += "Trades with notional >= 200:\n" + "".join(
+            [
+                f"    trade_id={trade.trade_id} trade_type={trade.trade_type} notional={trade.notional:.2f}\n"
+                for trade in trades_notional_gt_or_eq_200
+            ]
+        )
+
         # Further study - for MongoDB and certain other databases, wildcard queries
         # can be used to simultaneously query for GBP currency in both legs when this
         # data format is used. These advanced queries are outside the scope of this course.
