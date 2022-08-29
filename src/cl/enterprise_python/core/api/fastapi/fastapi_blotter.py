@@ -19,6 +19,7 @@ from fastapi import FastAPI, HTTPException
 from cl.enterprise_python.core.schema.tree.tree_leg import TreeLeg
 from cl.enterprise_python.core.schema.tree.tree_swap import TreeSwap
 from cl.enterprise_python.core.schema.tree.tree_trade import TreeTrade
+from cl.enterprise_python.core.schema.tree.tree_bond import TreeBond
 
 # Use connection alias specified in 'meta' attribute of the data types for the test
 connection_alias = "tree"
@@ -36,6 +37,7 @@ def create_trades(trade_count: int) -> List[TreeTrade]:
     # Create a list of currencies to populate swap records
     ccy_list = ["USD", "EUR", "GBP", "JPY", "NOK", "AUD", "CAD"]
     ccy_count = len(ccy_list)
+    notional_list = [100, 200, 300]
 
     # Create swap records
     swaps = [
@@ -46,6 +48,7 @@ def create_trades(trade_count: int) -> List[TreeTrade]:
                 TreeLeg(leg_type="Fixed", leg_ccy=ccy_list[i % ccy_count]),
                 TreeLeg(leg_type="Floating", leg_ccy=ccy_list[(2 * i) % ccy_count]),
             ],
+            notional=[notional_list[i]],
         )
         for i in range(trade_count)
     ]
@@ -114,6 +117,22 @@ def query_trades(leg_ccy: Optional[str] = None):
 @app.get("/example_raising_exception")
 def example_raising_exception():
     raise HTTPException(status_code=418, detail="Exception raised in FastAPI.")
+
+
+# Adding new function query_by_notional using with a single optional parameter min_notional.
+@app.post("/query_by_notional")
+def query_by_notional(min_notional: Optional[float] = None):
+    """
+    If the 'min_notional' parameter is specified, return all trades (including Bond trades)
+    where notional is >= min_notional, and all trades otherwise.
+    """
+
+    if min_notional:
+        trades = TreeTrade.objects(notional__gte=min_notional).order_by("trade_id")
+    else:
+        trades = TreeTrade.objects.order_by("trade_id")
+    result = {"trades": [trade.to_json() for trade in trades]}
+    return result
 
 
 if __name__ == "__main__":

@@ -30,5 +30,17 @@ if __name__ == "__main__":
 
     # Get one specific trade
     api_url = "http://localhost:50301/get_trade"  # Port used by fastapi_blotter.py
-    t3_trade = requests.post(api_url, params={"trade_id": "T003"})
+    t3_trade = requests.post(api_url, params={"trade_id": "T3"})
     print(f"Trade with trade_id=T3: {t3_trade.json()}")
+
+    # Query by notional without min_notional specified
+    # Just like copy of all trades query
+    api_url = "http://localhost:50301/query_by_notional"  # Port used by fastapi_blotter.py
+    no_min_notional_trades = requests.post(api_url)
+    print(f"All trades: {no_min_notional_trades.json()}")
+
+    # Query by notional with min_notional specified
+    api_url = "http://localhost:50301/query_by_notional"  # Port used by fastapi_blotter.py
+    # For example, let's specify min_notional with value of 101
+    trades_with_notional_gte_101 = requests.post(api_url, params={"min_notional": 101})
+    print(f"Trades with notional >= 101: {trades_with_notional_gte_101.json()}")
